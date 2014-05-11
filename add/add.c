@@ -54,7 +54,7 @@ char ft_itoa(int i)
 	return (value = i + '0');
 }
 
-char	*ft_add(char *arg1, char *arg2, int max)
+char	*ft_add(char *arg1, char *arg2, int max, int neg)
 {
 
 	int size1 = ft_strlen(arg1);
@@ -67,13 +67,13 @@ char	*ft_add(char *arg1, char *arg2, int max)
 	if (result == NULL)
 		exit(-1);
 	int loop = max;
-	while (loop != 0)
+	while (loop != neg)
 	{
 		result[loop-1] = ft_itoa(ft_atoi(arg2[size2-1])+ft_atoi(arg1[size1-1]));
 		loop--;
 		size2--;
-		if (size1-2 < 0)
-			arg1[0]='0';
+		if (size1-2 < neg)
+			arg1[neg]='0';
 		else
 			size1--;
 	}
@@ -89,9 +89,12 @@ int main (int argc, char **argv)
 		char *result;
 		bool neg1;
 		bool neg2;
+    int neg = 2;
 
 		ft_putstr(arg1);
 		ft_putstr(arg2);
+		int size1 = ft_strlen(arg1);
+		int size2 = ft_strlen(arg2);
 		if (arg1[0]=='-')
 			neg1=true;
 		else
@@ -100,40 +103,29 @@ int main (int argc, char **argv)
 			neg2=true;
 		else
 			neg2=false;
-		if (!neg1 && !neg2)
+		if ((!neg1 && !neg2) || (neg1 && neg2))
 		{
-			int size1 = ft_strlen(arg1);
-			int size2 = ft_strlen(arg2);
 			int retenue = 0;
 			int max = 0;
+      if (neg1)
+        neg=1;
+      else
+        neg=0;
 			if (size2 > size1)
 			{
-				// result = malloc(size2*sizeof(char)+1);
-				// max = size2;
-				// if (result == NULL)
-				// 	exit(-1);
-				// int loop = max;
-				// while (loop != 0)
-				// {
-				// 	result[loop-1] = ft_itoa(ft_atoi(arg2[size2-1])+ft_atoi(arg1[size1-1]));
-				// 	loop--;
-				// 	size2--;
-				// 	if (size1-2 < 0)
-				// 		arg1[0]='0';
-				// 	else
-				// 		size1--;
-				// }
-				result = ft_add(arg1, arg2, size2);
+				result = ft_add(arg1, arg2, size2, neg);
 			}
 			else
 			{
-				result = ft_add(arg2, arg1, size1);
+				result = ft_add(arg2, arg1, size1, neg);
 			}
 		}
 		else
 		{
 
 		}
+    if (neg == 1)
+      ft_putchar('-');
 		ft_putstr(result);
 	}
 	return (0);
